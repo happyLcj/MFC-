@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FinalGraphic", "FinalGraphic\FinalGraphic.vcproj", "{8E22E451-0FFC-4735-BAF5-815E0F2456EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E22E451-0FFC-4735-BAF5-815E0F2456EB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8E22E451-0FFC-4735-BAF5-815E0F2456EB}.Debug|Win32.Build.0 = Debug|Win32
+		{8E22E451-0FFC-4735-BAF5-815E0F2456EB}.Release|Win32.ActiveCfg = Release|Win32
+		{8E22E451-0FFC-4735-BAF5-815E0F2456EB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
