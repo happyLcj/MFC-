@@ -328,8 +328,8 @@ void CFinalGraphicView::OnFont()
 	if(dlg.DoModal()==IDOK){
 		dlg.GetCurrentFont(&lf);
 		m_FontColor=dlg.GetColor();
-		m_FontSize=dlg.GetSize();
 	}
+
 }
 
 
@@ -343,5 +343,12 @@ void CFinalGraphicView::OnText()
 		m_nY=dlg.m_nY;
 		m_nText=dlg.m_nText;
 	}
+	CFont font;
+	font.CreateFontIndirect(&lf);
+	CFont * pOldFont=(CFont*)pDc->SelectObject(&font);
+	pDc->SetTextColor(m_FontColor);
 	pDc->TextOutW(m_nX,m_nY,m_nText);
+	pDc->SelectObject(pOldFont);
+
+	font.DeleteObject();
 }
