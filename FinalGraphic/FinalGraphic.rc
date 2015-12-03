@@ -113,7 +113,7 @@ BEGIN
         MENUITEM "打印预览(&V)",                    ID_FILE_PRINT_PREVIEW
         MENUITEM "打印设置(&R)...",                 ID_FILE_PRINT_SETUP
         MENUITEM SEPARATOR
-        MENUITEM "最近的文件",                       ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM "最近的文件",                       ID_FILE_MRU_FILE1
         MENUITEM SEPARATOR
         MENUITEM "退出(&X)",                      ID_APP_EXIT
     END
@@ -143,11 +143,13 @@ BEGIN
         MENUITEM "圆角矩形(&C)",                    32779
         MENUITEM "椭圆(&E)",                      32780
     END
-    POPUP "画图设置(P)"
+    MENUITEM "文本编辑(&T)",                    ID_TEXT
+    POPUP "设置(P)"
     BEGIN
         MENUITEM "画笔宽度(&W)",                    ID_PENWIDTH
         MENUITEM "画笔颜色(&C)",                    ID_PENCOLOR
-        MENUITEM "画刷颜色(&F)",                    ID_BRUSHCOLOR
+        MENUITEM "画刷颜色(&B)",                    ID_BRUSHCOLOR
+        MENUITEM "字体设置(&F)",                    ID_FONT
     END
     POPUP "帮助(&H)"
     BEGIN
@@ -196,7 +198,7 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
 END
 
-IDD_DIALOG1 DIALOGEX 0, 0, 186, 93
+IDD_PENWIDTH DIALOGEX 0, 0, 186, 93
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -205,6 +207,21 @@ BEGIN
     PUSHBUTTON      "取消",IDCANCEL,103,52,50,14
     LTEXT           "画笔宽度：",IDC_STATIC,45,28,42,10
     EDITTEXT        IDC_EDIT1,94,26,49,14,ES_AUTOHSCROLL
+END
+
+IDD_TEXT DIALOGEX 0, 0, 210, 117
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "显示位置及文本内容"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,32,80,50,14
+    PUSHBUTTON      "取消",IDCANCEL,126,80,50,14
+    LTEXT           "X：",IDC_STATIC,21,26,13,8
+    LTEXT           "Y：",IDC_STATIC,21,56,13,8
+    EDITTEXT        IDC_EDIT1,41,22,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,41,53,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT3,118,22,61,45,ES_AUTOHSCROLL
+    LTEXT           "文本",IDC_STATIC,101,35,9,18
 END
 
 
@@ -263,12 +280,20 @@ BEGIN
         BOTTOMMARGIN, 48
     END
 
-    IDD_DIALOG1, DIALOG
+    IDD_PENWIDTH, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 179
         TOPMARGIN, 7
         BOTTOMMARGIN, 86
+    END
+
+    IDD_TEXT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 110
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -414,6 +439,7 @@ BEGIN
     ID_PENWIDTH             "画笔宽度"
     ID_PENCOLOR             "画笔颜色"
     ID_BRUSHCOLOR           "画刷颜色"
+    ID_FONT                 "字体设置"
 END
 
 #endif    // 中文(中华人民共和国) resources

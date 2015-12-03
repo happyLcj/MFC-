@@ -8,6 +8,8 @@
 #include "FinalGraphicView.h"
 
 #include "SetDlg.h"
+#include "TextDlg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -36,6 +38,8 @@ BEGIN_MESSAGE_MAP(CFinalGraphicView, CView)
 	ON_COMMAND(ID_PENWIDTH, &CFinalGraphicView::OnPenwidth)
 	ON_COMMAND(ID_PENCOLOR, &CFinalGraphicView::OnPencolor)
 	ON_COMMAND(ID_BRUSHCOLOR, &CFinalGraphicView::OnBrushcolor)
+	ON_COMMAND(ID_FONT, &CFinalGraphicView::OnFont)
+	ON_COMMAND(ID_TEXT, &CFinalGraphicView::OnText)
 END_MESSAGE_MAP()
 
 // CFinalGraphicView 构造/析构
@@ -50,6 +54,12 @@ CFinalGraphicView::CFinalGraphicView()
 	m_nWidth=1;
 	m_PenColor=RGB(0,0,0);
 	m_BrushColor=RGB(255,255,255);
+	m_FontColor=RGB(255,255,255);
+	m_FontSize=10;
+	m_nX=0;
+	m_nY=0;
+	m_nText=_T("");
+	
 }
 
 CFinalGraphicView::~CFinalGraphicView()
@@ -309,4 +319,29 @@ void CFinalGraphicView::OnBrushcolor()
 	if(dlg.DoModal()==IDOK){
 		m_BrushColor=dlg.GetColor();
 	}
+}
+
+void CFinalGraphicView::OnFont()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFontDialog dlg(&lf);
+	if(dlg.DoModal()==IDOK){
+		dlg.GetCurrentFont(&lf);
+		m_FontColor=dlg.GetColor();
+		m_FontSize=dlg.GetSize();
+	}
+}
+
+
+
+void CFinalGraphicView::OnText()
+{
+	// TODO: 在此添加命令处理程序代码
+	CTextDlg dlg;
+	if(dlg.DoModal()==IDOK){
+		m_nX=dlg.m_nX;
+		m_nY=dlg.m_nY;
+		m_nText=dlg.m_nText;
+	}
+	pDc->TextOutW(m_nX,m_nY,m_nText);
 }

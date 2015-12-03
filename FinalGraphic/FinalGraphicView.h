@@ -62,7 +62,13 @@ public:
 	CClientDC *pDc;
 	COLORREF m_PenColor;
 	COLORREF m_BrushColor;
+	COLORREF m_FontColor;
 	int m_nWidth;
+	int m_FontSize;
+	LOGFONT lf;
+	int m_nX;
+	int m_nY;
+	CString m_nText;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 public:
@@ -77,6 +83,10 @@ public:
 	afx_msg void OnPencolor();
 public:
 	afx_msg void OnBrushcolor();
+public:
+	afx_msg void OnFont();
+public:
+	afx_msg void OnText();
 };
 
 #ifndef _DEBUG  // FinalGraphicView.cpp 中的调试版本
