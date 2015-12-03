@@ -62,7 +62,7 @@ CFinalGraphicView::CFinalGraphicView()
 	m_nY=0;
 	m_nText=_T("");
 	m_nPenStyle=PS_SOLID;
-	
+	m_bSelectFont=false;
 }
 
 CFinalGraphicView::~CFinalGraphicView()
@@ -264,7 +264,7 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 			break;
 		case 2:
 		case 5:
-			pDc->Rectangle(CRect(m_ptStart,m_ptEnd));
+			pDc->Rectangle(CRect(m_ptStart,m_ptEnd)); 
 			break;
 		case 3:
 		case 6:
@@ -331,6 +331,7 @@ void CFinalGraphicView::OnFont()
 	if(dlg.DoModal()==IDOK){
 		dlg.GetCurrentFont(&lf);
 		m_FontColor=dlg.GetColor();
+		m_bSelectFont=true;
 	}
 
 }
@@ -346,14 +347,18 @@ void CFinalGraphicView::OnText()
 		m_nY=dlg.m_nY;
 		m_nText=dlg.m_nText;
 	}
-	CFont font;
-	font.CreateFontIndirect(&lf);
-	CFont * pOldFont=(CFont*)pDc->SelectObject(&font);
-	pDc->SetTextColor(m_FontColor);
-	pDc->TextOutW(m_nX,m_nY,m_nText);
-	pDc->SelectObject(pOldFont);
-
-	font.DeleteObject();
+	if(m_bSelectFont){
+		CFont font;
+		font.CreateFontIndirect(&lf);
+		CFont * pOldFont=(CFont*)pDc->SelectObject(&font);
+		pDc->SetTextColor(m_FontColor);
+		pDc->TextOutW(m_nX,m_nY,m_nText);
+		pDc->SelectObject(pOldFont);
+		font.DeleteObject();
+	}
+	else{
+		pDc->TextOutW(m_nX,m_nY,m_nText);
+	}
 }
 
 void CFinalGraphicView::OnLinetype()

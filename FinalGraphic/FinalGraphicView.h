@@ -56,7 +56,7 @@ public:
 	afx_msg void OnNelli();
 public:
 	int m_nDrawStyle;
-	long m_nPenStyle;
+	int m_nPenStyle;
 	bool m_bIsDown;
 	CPoint m_ptStart;
 	CPoint m_ptEnd;
@@ -70,6 +70,7 @@ public:
 	int m_nX;
 	int m_nY;
 	CString m_nText;
+	bool m_bSelectFont;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 public:
