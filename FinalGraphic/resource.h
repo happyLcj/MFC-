@@ -8,9 +8,12 @@
 #define IDR_FinalGraphicTYPE            129
 #define IDD_PENWIDTH                    130
 #define IDD_TEXT                        131
+#define IDD_DIALOG1                     133
+#define IDD_LINE_TYPE                   133
 #define IDC_EDIT1                       1000
 #define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1004
+#define IDC_COMBO1                      1008
 #define ID_LINE                         32772
 #define ID_RECT                         32775
 #define ID_ROURECT                      32776
@@ -26,14 +29,16 @@
 #define ID_BRUSHCOLOR                   32787
 #define ID_FONT                         32789
 #define ID_TEXT                         32791
+#define ID_32792                        32792
+#define ID_LINETYPE                     32793
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32792
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_COMMAND_VALUE         32794
+#define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

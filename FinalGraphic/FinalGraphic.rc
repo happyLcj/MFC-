@@ -150,6 +150,7 @@ BEGIN
         MENUITEM "画笔颜色(&C)",                    ID_PENCOLOR
         MENUITEM "画刷颜色(&B)",                    ID_BRUSHCOLOR
         MENUITEM "字体设置(&F)",                    ID_FONT
+        MENUITEM "线形设置(&L)",                    ID_LINETYPE
     END
     POPUP "帮助(&H)"
     BEGIN
@@ -224,6 +225,17 @@ BEGIN
     LTEXT           "文本",IDC_STATIC,101,35,9,18
 END
 
+IDD_LINE_TYPE DIALOGEX 0, 0, 161, 91
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "线形设置"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,25,56,50,14
+    PUSHBUTTON      "取消",IDCANCEL,87,56,50,14
+    COMBOBOX        IDC_COMBO1,87,24,50,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "线形:",IDC_STATIC,40,26,20,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -294,6 +306,14 @@ BEGIN
         RIGHTMARGIN, 203
         TOPMARGIN, 7
         BOTTOMMARGIN, 110
+    END
+
+    IDD_LINE_TYPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 154
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
     END
 END
 #endif    // APSTUDIO_INVOKED

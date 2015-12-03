@@ -9,6 +9,7 @@
 
 #include "SetDlg.h"
 #include "TextDlg.h"
+#include "LineTypeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,6 +41,7 @@ BEGIN_MESSAGE_MAP(CFinalGraphicView, CView)
 	ON_COMMAND(ID_BRUSHCOLOR, &CFinalGraphicView::OnBrushcolor)
 	ON_COMMAND(ID_FONT, &CFinalGraphicView::OnFont)
 	ON_COMMAND(ID_TEXT, &CFinalGraphicView::OnText)
+	ON_COMMAND(ID_LINETYPE, &CFinalGraphicView::OnLinetype)
 END_MESSAGE_MAP()
 
 // CFinalGraphicView 构造/析构
@@ -59,6 +61,7 @@ CFinalGraphicView::CFinalGraphicView()
 	m_nX=0;
 	m_nY=0;
 	m_nText=_T("");
+	m_nPenStyle=PS_SOLID;
 	
 }
 
@@ -188,7 +191,7 @@ void CFinalGraphicView::OnMouseMove(UINT nFlags, CPoint point)
 	if(!m_bIsDown)
 		return ;
 	CPen pen;
-	pen.CreatePen(PS_SOLID,m_nWidth,m_PenColor);
+	pen.CreatePen(m_nPenStyle,m_nWidth,m_PenColor);
 	CPen* pOldPen = pDc->SelectObject(&pen);
 	CBrush brush(m_BrushColor);
 	CBrush* pOldBr=NULL;
@@ -240,7 +243,7 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	m_ptEnd=point;
 	CPen pen;
-	pen.CreatePen(PS_SOLID,m_nWidth,m_PenColor);
+	pen.CreatePen(m_nPenStyle,m_nWidth,m_PenColor);
 	CPen* pOldPen = pDc->SelectObject(&pen);
 	CBrush brush(m_BrushColor);
 	//brush.CreateSysColorBrush(color);
@@ -351,4 +354,29 @@ void CFinalGraphicView::OnText()
 	pDc->SelectObject(pOldFont);
 
 	font.DeleteObject();
+}
+
+void CFinalGraphicView::OnLinetype()
+{
+	// TODO: 在此添加命令处理程序代码
+	CLineTypeDlg dlg;
+	CString str=_T("");
+	if(dlg.DoModal()==IDOK){
+		str=dlg.m_PenStyle; 
+	}
+	if(str=="实线"){
+		m_nPenStyle=PS_SOLID;
+	}
+	else if(str=="虚线"){
+		m_nPenStyle=PS_DASH;
+	}
+	else if(str=="点线"){
+		m_nPenStyle=PS_DOT;
+	}
+	else if(str=="虚点线"){
+		m_nPenStyle=PS_DASHDOT;
+	}
+	else if(str=="双点虚线"){
+		m_nPenStyle=PS_DASHDOTDOT;
+	}	
 }

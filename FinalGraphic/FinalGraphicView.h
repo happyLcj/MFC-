@@ -56,6 +56,7 @@ public:
 	afx_msg void OnNelli();
 public:
 	int m_nDrawStyle;
+	long m_nPenStyle;
 	bool m_bIsDown;
 	CPoint m_ptStart;
 	CPoint m_ptEnd;
@@ -87,6 +88,8 @@ public:
 	afx_msg void OnFont();
 public:
 	afx_msg void OnText();
+public:
+	afx_msg void OnLinetype();
 };
 
 #ifndef _DEBUG  // FinalGraphicView.cpp 中的调试版本
