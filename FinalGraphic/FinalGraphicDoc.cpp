@@ -6,6 +6,7 @@
 
 #include "FinalGraphicDoc.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -49,6 +50,7 @@ BOOL CFinalGraphicDoc::OnNewDocument()
 
 void CFinalGraphicDoc::Serialize(CArchive& ar)
 {
+	m_DrawSet.Serialize(ar);
 	if (ar.IsStoring())
 	{
 		// TODO: 在此添加存储代码

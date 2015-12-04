@@ -10,6 +10,7 @@
 #include "SetDlg.h"
 #include "TextDlg.h"
 #include "LineTypeDlg.h"
+#include "DrawSet.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -53,15 +54,15 @@ CFinalGraphicView::CFinalGraphicView()
 	m_bIsDown=false;
 	m_ptStart=m_ptEnd=0;
 	pDc=NULL;
-	m_nWidth=1;
-	m_PenColor=RGB(0,0,0);
-	m_BrushColor=RGB(255,255,255);
+	//m_nWidth=1;
+	//m_PenColor=RGB(0,0,0);
+	//m_BrushColor=RGB(255,255,255);
 	m_FontColor=RGB(255,255,255);
 	m_FontSize=10;
 	m_nX=0;
 	m_nY=0;
 	m_nText=_T("");
-	m_nPenStyle=PS_SOLID;
+	//m_nPenStyle=PS_SOLID;
 	m_bSelectFont=false;
 }
 
@@ -190,10 +191,12 @@ void CFinalGraphicView::OnMouseMove(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	if(!m_bIsDown)
 		return ;
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	CPen pen;
-	pen.CreatePen(m_nPenStyle,m_nWidth,m_PenColor);
+	pen.CreatePen(pDoc->m_DrawSet.m_nPenStyle,pDoc->m_DrawSet.m_nWidth,pDoc->m_DrawSet.m_PenColor);
 	CPen* pOldPen = pDc->SelectObject(&pen);
-	CBrush brush(m_BrushColor);
+	CBrush brush(pDoc->m_DrawSet.m_BrushColor);
 	CBrush* pOldBr=NULL;
 	if(m_nDrawStyle>=1&&m_nDrawStyle<=4){
 		pOldBr= pDc->SelectObject(&brush);
@@ -242,10 +245,12 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	m_ptEnd=point;
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	CPen pen;
-	pen.CreatePen(m_nPenStyle,m_nWidth,m_PenColor);
+	pen.CreatePen(pDoc->m_DrawSet.m_nPenStyle,pDoc->m_DrawSet.m_nWidth,pDoc->m_DrawSet.m_PenColor);
 	CPen* pOldPen = pDc->SelectObject(&pen);
-	CBrush brush(m_BrushColor);
+	CBrush brush(pDoc->m_DrawSet.m_BrushColor);
 	//brush.CreateSysColorBrush(color);
 
 	CBrush* pOldBr=NULL;
@@ -301,26 +306,32 @@ void CFinalGraphicView::OnPenwidth()
 {
 	// TODO: 在此添加命令处理程序代码
 	CSetDlg dlg;
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	if(dlg.DoModal()==IDOK){
-		m_nWidth=dlg.m_PenWidth;
+		pDoc->m_DrawSet.m_nWidth=dlg.m_PenWidth;
 	}
 }
 
 void CFinalGraphicView::OnPencolor()
 {
 	// TODO: 在此添加命令处理程序代码
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	CColorDialog dlg(0,CC_FULLOPEN);
 	if(dlg.DoModal()==IDOK){
-		m_PenColor=dlg.GetColor();
+		pDoc->m_DrawSet.m_PenColor=dlg.GetColor();
 	}
 }
 
 void CFinalGraphicView::OnBrushcolor()
 {
 	// TODO: 在此添加命令处理程序代码
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	CColorDialog dlg(0,CC_FULLOPEN);
 	if(dlg.DoModal()==IDOK){
-		m_BrushColor=dlg.GetColor();
+		pDoc->m_DrawSet.m_BrushColor=dlg.GetColor();
 	}
 }
 
@@ -364,24 +375,26 @@ void CFinalGraphicView::OnText()
 void CFinalGraphicView::OnLinetype()
 {
 	// TODO: 在此添加命令处理程序代码
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
 	CLineTypeDlg dlg;
 	CString str=_T("");
 	if(dlg.DoModal()==IDOK){
 		str=dlg.m_PenStyle; 
 	}
 	if(str=="实线"){
-		m_nPenStyle=PS_SOLID;
+		pDoc->m_DrawSet.m_nPenStyle=PS_SOLID;
 	}
 	else if(str=="虚线"){
-		m_nPenStyle=PS_DASH;
+		pDoc->m_DrawSet.m_nPenStyle=PS_DASH;
 	}
 	else if(str=="点线"){
-		m_nPenStyle=PS_DOT;
+		pDoc->m_DrawSet.m_nPenStyle=PS_DOT;
 	}
 	else if(str=="虚点线"){
-		m_nPenStyle=PS_DASHDOT;
+		pDoc->m_DrawSet.m_nPenStyle=PS_DASHDOT;
 	}
 	else if(str=="双点虚线"){
-		m_nPenStyle=PS_DASHDOTDOT;
+		pDoc->m_DrawSet.m_nPenStyle=PS_DASHDOTDOT;
 	}	
 }

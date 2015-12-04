@@ -3,7 +3,7 @@
 
 
 #pragma once
-
+#include "DrawSet.h"
 
 class CFinalGraphicDoc : public CDocument
 {
@@ -13,7 +13,7 @@ protected: // 仅从序列化创建
 
 // 属性
 public:
-
+	CDrawSet m_DrawSet;
 // 操作
 public:
 
