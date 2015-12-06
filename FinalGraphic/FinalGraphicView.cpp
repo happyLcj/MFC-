@@ -50,8 +50,7 @@ END_MESSAGE_MAP()
 
 CFinalGraphicView::CFinalGraphicView()
 {
-	// TODO: 在此处添加构造代码
-	
+	// TODO: 在此处添加构造代码	
 	pDc=NULL;
 	
 }
@@ -77,6 +76,7 @@ void CFinalGraphicView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 	// TODO: 在此处为本机数据添加绘制代码
+
 	POSITION pos=pDoc->m_lGraph.GetHeadPosition();
 	int nCount=(int)pDoc->m_lGraph.GetCount();
 
@@ -180,7 +180,7 @@ CFinalGraphicDoc* CFinalGraphicView::GetDocument() const // 非调试版本是内联的
 
 // CFinalGraphicView 消息处理程序
 
-void CFinalGraphicView::OnLine()
+void CFinalGraphicView::OnLine()            //直线
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -189,7 +189,7 @@ void CFinalGraphicView::OnLine()
 	pDoc->m_SeriGraph.m_nDrawStyle=1;
 }
 
-void CFinalGraphicView::OnFrect()
+void CFinalGraphicView::OnFrect()         //填充直角矩形
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -198,7 +198,7 @@ void CFinalGraphicView::OnFrect()
 	pDoc->m_SeriGraph.m_nDrawStyle=2;
 }
 
-void CFinalGraphicView::OnFrourect()
+void CFinalGraphicView::OnFrourect()    //填充圆角矩形
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -207,7 +207,7 @@ void CFinalGraphicView::OnFrourect()
 	pDoc->m_SeriGraph.m_nDrawStyle=3;
 }
 
-void CFinalGraphicView::OnFelli()
+void CFinalGraphicView::OnFelli()        //填充椭圆
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -216,7 +216,7 @@ void CFinalGraphicView::OnFelli()
 	pDoc->m_SeriGraph.m_nDrawStyle=4;
 }
 
-void CFinalGraphicView::OnNrect()
+void CFinalGraphicView::OnNrect()       //空心直角矩形
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -225,7 +225,7 @@ void CFinalGraphicView::OnNrect()
 	pDoc->m_SeriGraph.m_nDrawStyle=5;
 }
 
-void CFinalGraphicView::OnNrourect()
+void CFinalGraphicView::OnNrourect()     //空心圆角矩形
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -234,7 +234,7 @@ void CFinalGraphicView::OnNrourect()
 	pDoc->m_SeriGraph.m_nDrawStyle=6;
 }
 
-void CFinalGraphicView::OnNelli()
+void CFinalGraphicView::OnNelli()        //空心椭圆
 {
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
@@ -249,7 +249,7 @@ void CFinalGraphicView::OnLButtonDown(UINT nFlags, CPoint point)
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if(!(pDoc->m_SeriGraph.m_bIsDown)){
-		pDoc->m_SeriGraph.m_bIsDown=true;
+		pDoc->m_SeriGraph.m_bIsDown=true;          //鼠标左键按下
 		pDoc->m_SeriGraph.m_ptStart=pDoc->m_SeriGraph.m_ptEnd=point;
 		pDc->SetROP2(R2_NOTXORPEN);
 	}
@@ -264,54 +264,55 @@ void CFinalGraphicView::OnMouseMove(UINT nFlags, CPoint point)
 
 	if(!(pDoc->m_SeriGraph.m_bIsDown))
 		return ;
-	
-	CPen pen;
-	pen.CreatePen(pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle,pDoc->m_SeriGraph.m_DrawSet.m_nWidth,pDoc->m_SeriGraph.m_DrawSet.m_PenColor);
-	CPen* pOldPen = pDc->SelectObject(&pen);
+	CSeriGraph& SeriGraph=pDoc->m_SeriGraph;
 
-	CBrush brush(pDoc->m_SeriGraph.m_DrawSet.m_BrushColor);
+	CPen pen;     //创建画笔并初始化
+	pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
+	CPen* pOldPen = pDc->SelectObject(&pen);      //将原画笔置换出来
+
+	CBrush brush(SeriGraph.m_DrawSet.m_BrushColor);     //创建画刷并初始化
 	CBrush* pOldBr=NULL;
 
-	if(pDoc->m_SeriGraph.m_nDrawStyle>=1&&pDoc->m_SeriGraph.m_nDrawStyle<=4){    //设置画刷颜色，画填充图形
-		pOldBr= pDc->SelectObject(&brush);
+	if(SeriGraph.m_nDrawStyle>=1&&SeriGraph.m_nDrawStyle<=4){    //设置画刷颜色，画填充图形
+		pOldBr= pDc->SelectObject(&brush);           //将原画刷置换出来
 	}
-	else if(pDoc->m_SeriGraph.m_nDrawStyle>=5&&pDoc->m_SeriGraph.m_nDrawStyle<=7){    //设置空刷，画空心图形
-		pOldBr=(CBrush *)pDc->SelectStockObject(NULL_BRUSH);
+	else if(SeriGraph.m_nDrawStyle>=5&&SeriGraph.m_nDrawStyle<=7){    //设置空刷，画空心图形
+		pOldBr=(CBrush *)pDc->SelectStockObject(NULL_BRUSH);          //将原画刷置换出来
 	}
 		
-	switch(pDoc->m_SeriGraph.m_nDrawStyle){
+	switch(SeriGraph.m_nDrawStyle){           //橡皮筋技术
 		case 1:
-			pDc->MoveTo(pDoc->m_SeriGraph.m_ptStart.x,pDoc->m_SeriGraph.m_ptStart.y);
-			pDc->LineTo(pDoc->m_SeriGraph.m_ptEnd.x,pDoc->m_SeriGraph.m_ptEnd.y);
-			pDoc->m_SeriGraph.m_ptEnd = point;	
-			pDc->MoveTo(pDoc->m_SeriGraph.m_ptStart.x,pDoc->m_SeriGraph.m_ptStart.y);
-			pDc->LineTo(pDoc->m_SeriGraph.m_ptEnd.x,pDoc->m_SeriGraph.m_ptEnd.y);
+			pDc->MoveTo(SeriGraph.m_ptStart.x,SeriGraph.m_ptStart.y);  //先将原图隐藏
+			pDc->LineTo(SeriGraph.m_ptEnd.x,SeriGraph.m_ptEnd.y);
+			SeriGraph.m_ptEnd = point;	
+			pDc->MoveTo(SeriGraph.m_ptStart.x,SeriGraph.m_ptStart.y);  //再绘制新图形
+			pDc->LineTo(SeriGraph.m_ptEnd.x,SeriGraph.m_ptEnd.y);
 			break;
 		case 2:
 		case 5:
-			pDc->Rectangle(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd));
-			pDoc->m_SeriGraph.m_ptEnd=point;
-			pDc->Rectangle(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd));
+			pDc->Rectangle(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd));
+			SeriGraph.m_ptEnd=point;
+			pDc->Rectangle(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd));
 			break;
 		case 3:
 		case 6:
-			pDc->RoundRect(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd),CPoint(25,25));
-			pDoc->m_SeriGraph.m_ptEnd=point;
-			pDc->RoundRect(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd),CPoint(25,25));
+			pDc->RoundRect(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd),CPoint(25,25));
+			SeriGraph.m_ptEnd=point;
+			pDc->RoundRect(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd),CPoint(25,25));
 			break;
 		case 4:
 		case 7:
-			pDc->Ellipse(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd));
-			pDoc->m_SeriGraph.m_ptEnd=point;
-			pDc->Ellipse(CRect(pDoc->m_SeriGraph.m_ptStart,pDoc->m_SeriGraph.m_ptEnd));
+			pDc->Ellipse(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd));
+			SeriGraph.m_ptEnd=point;
+			pDc->Ellipse(CRect(SeriGraph.m_ptStart,SeriGraph.m_ptEnd));
 			break;
 		
 	}
 
-	pDc->SelectObject(pOldPen);
-	pDc->SelectObject(pOldBr);
-	pen.DeleteObject();
-	brush.DeleteObject();
+	pDc->SelectObject(pOldPen);        //换回原画笔
+	pDc->SelectObject(pOldBr);         //换回原画刷
+	pen.DeleteObject();                //删除画笔
+	brush.DeleteObject();			   //删除画刷
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -326,7 +327,7 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 	pDoc->m_SeriGraph.m_bIsDown=false;
 
 	pDoc->m_lGraph.AddTail(pDoc->m_SeriGraph);         //将画的图形存到图形链表中
-	Invalidate();
+	Invalidate();									   //强制刷新，将调用OnDraw函数，在该函数中绘图
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -399,7 +400,6 @@ void CFinalGraphicView::OnFont()                //设置字体
 }
 
 
-
 void CFinalGraphicView::OnText()           //输入文本显示位置及内容
 {
 	// TODO: 在此添加命令处理程序代码
@@ -413,8 +413,8 @@ void CFinalGraphicView::OnText()           //输入文本显示位置及内容
 		TmpSeriGraph.m_nY=dlg.m_nY;
 		TmpSeriGraph.m_nText=dlg.m_nText;
 		TmpSeriGraph.m_nDrawStyle=8;
-		pDoc->m_lGraph.AddTail(TmpSeriGraph);
-		Invalidate();
+		pDoc->m_lGraph.AddTail(TmpSeriGraph);     //将相关信息保存
+		Invalidate();                             //强制刷新会重绘，将调用OnDraw函数
 	}
 }
 
@@ -425,37 +425,20 @@ void CFinalGraphicView::OnLinetype()                  //设置线形
 	ASSERT_VALID(pDoc);
 	CLineTypeDlg dlg;
 	int nSelect=pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle;
-	CString str=_T("");
-	switch(nSelect){
-		case 0:
-			str="实线";break;
-		case 1:
-			str="虚线";break;
-		case 2:
-			str="点线";break;
-		case 3:
-			str="虚点线";break;
-		case 4:
-			str="双点虚线";break;
-	}
-	dlg.m_PenStyle=str;                 //设置对话框默认线形
 
+   /*#define PS_SOLID            0
+	*#define PS_DASH             1       
+	*#define PS_DOT              2       
+	*#define PS_DASHDOT          3       
+	*#define PS_DASHDOTDOT       4      
+	*/
+	CString str[]={_T("实线"),_T("虚线"),_T("点线"),_T("虚点线"),_T("双点虚线")};
+	dlg.m_PenStyle=str[nSelect];                 //设置对话框默认线形
 	if(dlg.DoModal()==IDOK){
-		str=dlg.m_PenStyle; 
+		for(int i=0;i<5;i++){
+			if(dlg.m_PenStyle==str[i])
+				pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=i;    //存储线形
+		}
 	}
-	if(str=="实线"){                 //存储线形
-		pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=PS_SOLID;
-	}
-	else if(str=="虚线"){
-		pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=PS_DASH;
-	}
-	else if(str=="点线"){
-		pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=PS_DOT;
-	}
-	else if(str=="虚点线"){
-		pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=PS_DASHDOT;
-	}
-	else if(str=="双点虚线"){
-		pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=PS_DASHDOTDOT;
-	}	
+	
 }

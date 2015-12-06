@@ -11,7 +11,7 @@ CDrawSet::CDrawSet()
 	m_BrushColor=RGB(255,255,255);   //填充颜色：白色
 }
 
-CDrawSet &CDrawSet::operator=(const CDrawSet &DrawSet)
+CDrawSet &CDrawSet::operator=(const CDrawSet &DrawSet)  //赋值构造函数
 {
 	m_nWidth=DrawSet.m_nWidth;
 	m_nPenStyle=DrawSet.m_nPenStyle;
@@ -24,7 +24,7 @@ CDrawSet::~CDrawSet()
 {
 }
 
-void CDrawSet::Serialize(CArchive& ar)
+void CDrawSet::Serialize(CArchive& ar)    //序列化
 {
 	if (ar.IsStoring())
 	{	// storing code

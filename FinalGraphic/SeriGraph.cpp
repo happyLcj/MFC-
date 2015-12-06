@@ -14,7 +14,7 @@ CSeriGraph::CSeriGraph()
 	m_nText=_T("");
 }
 
-CSeriGraph::CSeriGraph(const CSeriGraph& ser)
+CSeriGraph::CSeriGraph(const CSeriGraph& ser)    //拷贝构造函数
 {
 	m_DrawSet=ser.m_DrawSet;
 	m_FontSet=ser.m_FontSet;
@@ -28,7 +28,7 @@ CSeriGraph::CSeriGraph(const CSeriGraph& ser)
 	m_nY=ser.m_nY;
 	m_nText=ser.m_nText;
 }
-CSeriGraph &CSeriGraph::operator=(const CSeriGraph &ser)
+CSeriGraph &CSeriGraph::operator=(const CSeriGraph &ser)    //赋值构造函数
 {
 	m_DrawSet=ser.m_DrawSet;
 	m_FontSet=ser.m_FontSet;
@@ -47,9 +47,9 @@ CSeriGraph::~CSeriGraph()
 {
 }
 
-void CSeriGraph::Serialize(CArchive& ar)
+void CSeriGraph::Serialize(CArchive& ar)      //序列化
 {
-	m_DrawSet.Serialize(ar);
+	m_DrawSet.Serialize(ar);    
 	m_FontSet.Serialize(ar);
 	if (ar.IsStoring())
 	{	// storing code
