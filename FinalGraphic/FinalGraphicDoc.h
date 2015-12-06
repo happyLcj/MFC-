@@ -4,16 +4,19 @@
 
 #pragma once
 #include "DrawSet.h"
+#include "FontSet.h"
+#include "SeriGraph.h"
+
 
 class CFinalGraphicDoc : public CDocument
 {
 protected: // 仅从序列化创建
 	CFinalGraphicDoc();
 	DECLARE_DYNCREATE(CFinalGraphicDoc)
-
 // 属性
 public:
-	CDrawSet m_DrawSet;
+	CSeriGraph m_SeriGraph;
+	CList<CSeriGraph,CSeriGraph&> m_lGraph;
 // 操作
 public:
 

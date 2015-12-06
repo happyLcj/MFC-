@@ -206,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FontSet.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LineTypeDlg.cpp"
 				>
 			</File>
@@ -214,7 +218,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SetDlg.cpp"
+				RelativePath=".\PenWidthDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SeriGraph.cpp"
 				>
 			</File>
 			<File
@@ -264,6 +272,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FontSet.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LineTypeDlg.h"
 				>
 			</File>
@@ -272,11 +284,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PenWidthDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SetDlg.h"
+				RelativePath=".\SeriGraph.h"
 				>
 			</File>
 			<File

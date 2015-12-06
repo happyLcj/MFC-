@@ -55,22 +55,7 @@ public:
 public:
 	afx_msg void OnNelli();
 public:
-	int m_nDrawStyle;
-	//int m_nPenStyle;
-	bool m_bIsDown;
-	CPoint m_ptStart;
-	CPoint m_ptEnd;
 	CClientDC *pDc;
-	//COLORREF m_PenColor;
-	//COLORREF m_BrushColor;
-	COLORREF m_FontColor;
-	//int m_nWidth;
-	int m_FontSize;
-	LOGFONT lf;
-	int m_nX;
-	int m_nY;
-	CString m_nText;
-	bool m_bSelectFont;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 public:

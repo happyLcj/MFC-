@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "FinalGraphic.h"
-
 #include "FinalGraphicDoc.h"
 
 
@@ -50,14 +49,30 @@ BOOL CFinalGraphicDoc::OnNewDocument()
 
 void CFinalGraphicDoc::Serialize(CArchive& ar)
 {
-	m_DrawSet.Serialize(ar);
+	m_SeriGraph.Serialize(ar);    
+	POSITION pos;
+	CSeriGraph SeriGraph;
+	int nCount=0;
 	if (ar.IsStoring())
 	{
 		// TODO: 在此添加存储代码
+		nCount=(int)m_lGraph.GetCount();
+		ar<<nCount;
+		pos=m_lGraph.GetHeadPosition();
+		for(int i=0;i<nCount;i++){
+			SeriGraph=m_lGraph.GetNext(pos);
+			SeriGraph.Serialize(ar);
+		}
 	}
 	else
 	{
 		// TODO: 在此添加加载代码
+		ar>>nCount;
+		pos=m_lGraph.GetHeadPosition();
+		for(int i=0;i<nCount;i++){
+			SeriGraph.Serialize(ar);
+			m_lGraph.AddTail(SeriGraph);
+		}
 	}
 }
 
