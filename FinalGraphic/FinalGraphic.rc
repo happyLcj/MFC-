@@ -74,6 +74,8 @@ IDR_FinalGraphicTYPE    ICON                    "res\\FinalGraphicDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_GRAPHTB             BITMAP                  "res\\toolbar1.bmp"
+IDR_SETINFOTB           BITMAP                  "res\\bmp00001.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -92,6 +94,28 @@ BEGIN
     SEPARATOR
     BUTTON      ID_FILE_PRINT
     BUTTON      ID_APP_ABOUT
+END
+
+IDR_GRAPHTB TOOLBAR  32, 32
+BEGIN
+    BUTTON      ID_LINE
+    SEPARATOR
+    BUTTON      ID_FRECT
+    BUTTON      ID_NRECT
+    BUTTON      ID_FROURECT
+    BUTTON      ID_NROURECT
+    BUTTON      ID_FELLI
+    BUTTON      ID_NELLI
+    BUTTON      ID_TEXT
+END
+
+IDR_SETINFOTB TOOLBAR  32, 32
+BEGIN
+    BUTTON      ID_PENWIDTH
+    BUTTON      ID_PENCOLOR
+    BUTTON      ID_BRUSHCOLOR
+    BUTTON      ID_LINETYPE
+    BUTTON      ID_FONT
 END
 
 
@@ -129,6 +153,8 @@ BEGIN
     BEGIN
         MENUITEM "工具栏(&T)",                     ID_VIEW_TOOLBAR
         MENUITEM "状态栏(&S)",                     ID_VIEW_STATUS_BAR
+        MENUITEM "画图工具栏(&G)",                   ID_GRAPHTB
+        MENUITEM "设置工具栏(&I)",                   32802
     END
     POPUP "填充图形(&F)"
     BEGIN
@@ -139,9 +165,9 @@ BEGIN
     END
     POPUP "空心图形(N)"
     BEGIN
-        MENUITEM "直角矩形(&R)",                    32778
-        MENUITEM "圆角矩形(&C)",                    32779
-        MENUITEM "椭圆(&E)",                      32780
+        MENUITEM "直角矩形(&R)",                    ID_NRECT
+        MENUITEM "圆角矩形(&C)",                    ID_NROURECT
+        MENUITEM "椭圆(&E)",                      ID_NELLI
     END
     MENUITEM "文本编辑(&T)",                    ID_TEXT
     POPUP "设置(P)"
@@ -460,6 +486,14 @@ BEGIN
     ID_PENCOLOR             "画笔颜色"
     ID_BRUSHCOLOR           "画刷颜色"
     ID_FONT                 "字体设置"
+    ID_TEXT                 "文本工具"
+    ID_LINETYPE             "线形设置"
+    ID_GRAPHTB              "画图工具栏"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_SETINFO              "设置工具栏"
 END
 
 #endif    // 中文(中华人民共和国) resources

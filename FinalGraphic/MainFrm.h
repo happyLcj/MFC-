@@ -32,11 +32,20 @@ public:
 protected:  // 控件条嵌入成员
 	CStatusBar  m_wndStatusBar;
 	CToolBar    m_wndToolBar;
-
+	CToolBar    m_GraphTB;
+	CToolBar    m_SetInfoTB;
 // 生成的消息映射函数
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnGraphtb();
+public:
+	afx_msg void OnUpdateGraphtb(CCmdUI *pCmdUI);
+public:
+	afx_msg void OnSetinfo();
+public:
+	afx_msg void OnUpdateSetinfo(CCmdUI *pCmdUI);
 };
 
 

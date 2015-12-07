@@ -17,6 +17,10 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
+	ON_COMMAND(ID_GRAPHTB, &CMainFrame::OnGraphtb)
+	ON_UPDATE_COMMAND_UI(ID_GRAPHTB, &CMainFrame::OnUpdateGraphtb)
+	ON_COMMAND(ID_SETINFO, &CMainFrame::OnSetinfo)
+	ON_UPDATE_COMMAND_UI(ID_SETINFO, &CMainFrame::OnUpdateSetinfo)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -52,6 +56,22 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("未能创建工具栏\n");
 		return -1;      // 未能创建
 	}
+	
+	if (!m_GraphTB.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_LEFT
+		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_GraphTB.LoadToolBar(IDR_GRAPHTB))
+	{
+		TRACE0("未能创建工具栏\n");
+		return -1;      // 未能创建
+	}
+
+	if (!m_SetInfoTB.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_RIGHT
+		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_SetInfoTB.LoadToolBar(IDR_SETINFOTB))
+	{
+		TRACE0("未能创建工具栏\n");
+		return -1;      // 未能创建
+	}
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
@@ -63,8 +83,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO: 如果不需要工具栏可停靠，则删除这三行
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	m_GraphTB.EnableDocking(CBRS_ALIGN_ANY);
+	m_SetInfoTB.EnableDocking(CBRS_ALIGN_ANY);
+
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
+	DockControlBar(&m_GraphTB);
+	DockControlBar(&m_SetInfoTB);
 
 	return 0;
 }
@@ -100,3 +125,33 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 
 
+
+void CMainFrame::OnGraphtb()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_GraphTB.ShowWindow(m_GraphTB.IsWindowVisible()?SW_HIDE:SW_SHOW);
+	RecalcLayout();
+	DockControlBar(&m_GraphTB);
+
+}
+
+void CMainFrame::OnUpdateGraphtb(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_GraphTB.IsWindowVisible());
+
+}
+
+void CMainFrame::OnSetinfo()
+{
+	// TODO: 在此添加命令处理程序代码
+	m_SetInfoTB.ShowWindow(m_SetInfoTB.IsWindowVisible()?SW_HIDE:SW_SHOW);
+	RecalcLayout();
+	DockControlBar(&m_SetInfoTB);
+}
+
+void CMainFrame::OnUpdateSetinfo(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_SetInfoTB.IsWindowVisible());
+}
