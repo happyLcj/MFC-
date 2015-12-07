@@ -4,6 +4,12 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
+#define ID_INDICATOR_PENWIDTH           101
+#define ID_INDICATOR_PENCOLOR           102
+#define ID_INDICATOR_BRUSHCOLOR         103
+#define ID_INDICATOR_FONT               104
+#define ID_INDICATOR_FONTCOLOR          105
+#define ID_INDICATOR_LINETYPE           106
 #define IDR_MAINFRAME                   128
 #define IDR_FinalGraphicTYPE            129
 #define IDD_PENWIDTH                    130
@@ -36,7 +42,6 @@
 #define ID_GRAPHTB                      32797
 #define IDR_SETINFOTB                   32801
 #define ID_SETINFO                      32802
-#define ID_BUTTON32804                  32804
 
 // Next default values for new objects
 // 

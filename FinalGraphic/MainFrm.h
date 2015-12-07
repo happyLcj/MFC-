@@ -29,8 +29,9 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // 控件条嵌入成员
+public:
 	CStatusBar  m_wndStatusBar;
+protected:  // 控件条嵌入成员
 	CToolBar    m_wndToolBar;
 	CToolBar    m_GraphTB;
 	CToolBar    m_SetInfoTB;

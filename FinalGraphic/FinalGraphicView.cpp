@@ -5,6 +5,7 @@
 #include "FinalGraphic.h"
 
 #include "FinalGraphicDoc.h"
+#include "MainFrm.h"
 #include "FinalGraphicView.h"
 
 #include "PenWidthDlg.h"
@@ -71,17 +72,48 @@ BOOL CFinalGraphicView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CFinalGraphicView::OnDraw(CDC* pDC)
 {
+	
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 	// TODO: 在此处为本机数据添加绘制代码
+	
+	CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+	CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+	CString str;
+	if(pStatus){                  //更新状态栏
+		str.Format(_T("画笔宽度：%d"),pDoc->m_SeriGraph.m_DrawSet.m_nWidth);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_PENWIDTH),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_PENWIDTH),ID_INDICATOR_PENWIDTH,SBPS_NOBORDERS,80);
 
+		str.Format(_T("画笔颜色：%x"),pDoc->m_SeriGraph.m_DrawSet.m_PenColor);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_PENCOLOR),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_PENCOLOR),ID_INDICATOR_PENCOLOR,SBPS_NOBORDERS,100);
+
+		str.Format(_T("画刷颜色：%x"),pDoc->m_SeriGraph.m_DrawSet.m_BrushColor);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_BRUSHCOLOR),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_BRUSHCOLOR),ID_INDICATOR_BRUSHCOLOR,SBPS_NOBORDERS,100);
+		
+		CString lineStr[]={_T("实线"),_T("虚线"),_T("点线"),_T("虚点线"),_T("双点虚线")};
+		str.Format(_T("线形：%s"),lineStr[pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle]);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_LINETYPE),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_LINETYPE),ID_INDICATOR_LINETYPE,SBPS_NOBORDERS,80);
+		
+		str.Format(_T("字体：%s"),pDoc->m_SeriGraph.m_FontSet.m_LogFont.lfFaceName);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_FONT),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_FONT),ID_INDICATOR_FONT,SBPS_NOBORDERS,100);
+
+		str.Format(_T("字体颜色：%x"),pDoc->m_SeriGraph.m_FontSet.m_FontColor);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),ID_INDICATOR_FONTCOLOR,SBPS_NOBORDERS,100);
+
+	}
 	POSITION pos=pDoc->m_lGraph.GetHeadPosition();
 	int nCount=(int)pDoc->m_lGraph.GetCount();
 
 	for(int i=0;i<nCount;i++){
-		CSeriGraph SeriGraph=pDoc->m_lGraph.GetNext(pos);
+		const CSeriGraph SeriGraph=pDoc->m_lGraph.GetNext(pos);
 		CPen pen;
 		pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
 		CPen* pOldPen = pDc->SelectObject(&pen);
@@ -347,12 +379,22 @@ void CFinalGraphicView::OnPenwidth()              //设置画笔宽度
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
- 
+	
+	if(!pDoc)
+		return ;
 	CPenWidthDlg dlg;    //设置dlg显示的画笔宽度默认值为当前画笔宽度
 	dlg.m_PenWidth=pDoc->m_SeriGraph.m_DrawSet.m_nWidth;  
 
 	if(dlg.DoModal()==IDOK){
 		pDoc->m_SeriGraph.m_DrawSet.m_nWidth=dlg.m_PenWidth;   //保存设置的画笔宽度
+		CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+		CString str;
+		if(pStatus){
+			str.Format(_T("画笔宽度：%d"),pDoc->m_SeriGraph.m_DrawSet.m_nWidth);
+			pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_PENWIDTH),str);
+			pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_PENWIDTH),ID_INDICATOR_PENWIDTH,SBPS_NOBORDERS,80);
+		}
 	}
 }
 
@@ -361,12 +403,22 @@ void CFinalGraphicView::OnPencolor()           //设置画笔颜色
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-
+	if(!pDoc) 
+		return ;
 	COLORREF &PenColor=pDoc->m_SeriGraph.m_DrawSet.m_PenColor;  //创建当前画笔颜色的引用
 	CColorDialog dlg(PenColor,CC_FULLOPEN);           //用当前画笔颜色初始化对话框默认选中的颜色
 	if(dlg.DoModal()==IDOK){
 		PenColor=dlg.GetColor();                     //将设置的画笔颜色保存
+		CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+		CString str;
+		if(pStatus){
+			str.Format(_T("画笔颜色：%x"),pDoc->m_SeriGraph.m_DrawSet.m_PenColor);
+			pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_PENCOLOR),str);
+			pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_PENCOLOR),ID_INDICATOR_PENCOLOR,SBPS_NOBORDERS,100);
+		}
 	}
+
 }
 
 void CFinalGraphicView::OnBrushcolor()          //设置画刷颜色
@@ -374,12 +426,22 @@ void CFinalGraphicView::OnBrushcolor()          //设置画刷颜色
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	
+	if(!pDoc) 
+		return ;
 	COLORREF &BrushColor=pDoc->m_SeriGraph.m_DrawSet.m_BrushColor;   //创建当前画刷颜色的引用
 	CColorDialog dlg(BrushColor,CC_FULLOPEN);      //用当前画刷颜色初始化对话框默认选中的颜色
 	if(dlg.DoModal()==IDOK){
 		BrushColor=dlg.GetColor();				   //将设置的画刷颜色保存
+		CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+		CString str;
+		if(pStatus){                                  //更新状态栏
+			str.Format(_T("画刷颜色：%x"),pDoc->m_SeriGraph.m_DrawSet.m_BrushColor);
+			pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_BRUSHCOLOR),str);
+			pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_BRUSHCOLOR),ID_INDICATOR_BRUSHCOLOR,SBPS_NOBORDERS,100);
+		}
 	}
+	
 }
 
 void CFinalGraphicView::OnFont()                //设置字体
@@ -395,6 +457,20 @@ void CFinalGraphicView::OnFont()                //设置字体
 	if(dlg.DoModal()==IDOK){
 		dlg.GetCurrentFont(&(TmpFontSet.m_LogFont));   //保存字体相关设置
 		TmpFontSet.m_FontColor=dlg.GetColor();
+
+		CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+		CString str;
+		if(!pStatus)
+			return ;
+		str.Format(_T("字体：%s"),TmpFontSet.m_LogFont.lfFaceName);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_FONT),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_FONT),ID_INDICATOR_FONT,SBPS_NOBORDERS,100);
+
+		str.Format(_T("字体颜色：%x"),TmpFontSet.m_FontColor);
+		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),str);
+		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),ID_INDICATOR_FONTCOLOR,SBPS_NOBORDERS,100);
+
 	}
 
 }
@@ -423,6 +499,8 @@ void CFinalGraphicView::OnLinetype()                  //设置线形
 	// TODO: 在此添加命令处理程序代码
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return ;
 	CLineTypeDlg dlg;
 	int nSelect=pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle;
 
@@ -432,13 +510,20 @@ void CFinalGraphicView::OnLinetype()                  //设置线形
 	*#define PS_DASHDOT          3       
 	*#define PS_DASHDOTDOT       4      
 	*/
-	CString str[]={_T("实线"),_T("虚线"),_T("点线"),_T("虚点线"),_T("双点虚线")};
-	dlg.m_PenStyle=str[nSelect];                 //设置对话框默认线形
+	CString lineStr[]={_T("实线"),_T("虚线"),_T("点线"),_T("虚点线"),_T("双点虚线")};
+	dlg.m_PenStyle=lineStr[nSelect];                 //设置对话框默认线形
 	if(dlg.DoModal()==IDOK){
 		for(int i=0;i<5;i++){
-			if(dlg.m_PenStyle==str[i])
+			if(dlg.m_PenStyle==lineStr[i])
 				pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle=i;    //存储线形
 		}
+		CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		CStatusBar * pStatus = &pFrame->m_wndStatusBar;
+		CString str;
+		if(pStatus){                  //更新状态栏
+			str.Format(_T("线形：%s"),lineStr[pDoc->m_SeriGraph.m_DrawSet.m_nPenStyle]);
+			pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_LINETYPE),str);
+			pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_LINETYPE),ID_INDICATOR_LINETYPE,SBPS_NOBORDERS,80);
+		}
 	}
-	
 }
