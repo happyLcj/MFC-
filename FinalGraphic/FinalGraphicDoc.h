@@ -15,6 +15,11 @@ protected: // 仅从序列化创建
 	DECLARE_DYNCREATE(CFinalGraphicDoc)
 // 属性
 public:
+	int m_nCheckedId;				//记录选中图形的标号
+	bool m_bIsChecked;              //标记是否进入选中模式
+	COLORREF crOldColor;            
+	int nOldWidth;
+	const CSeriGraph m_DefaultSet;
 	CSeriGraph m_SeriGraph;
 	CList<CSeriGraph,CSeriGraph&> m_lGraph;
 // 操作

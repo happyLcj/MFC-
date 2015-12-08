@@ -76,6 +76,10 @@ public:
 	afx_msg void OnText();
 public:
 	afx_msg void OnLinetype();
+public:
+	afx_msg void OnDelete();
+public:
+	afx_msg void OnChecked();
 };
 
 #ifndef _DEBUG  // FinalGraphicView.cpp 中的调试版本

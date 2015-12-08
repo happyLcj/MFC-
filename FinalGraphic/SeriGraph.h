@@ -2,7 +2,7 @@
 #include "afx.h"
 #include "DrawSet.h"
 #include "FontSet.h"
-
+#define eps 1e-5
 class CSeriGraph:public CObject
 {
 DECLARE_SERIAL(CSeriGraph)
@@ -23,6 +23,11 @@ public:
 	CSeriGraph();
 	CSeriGraph(const CSeriGraph& );  
 	CSeriGraph& operator=(const CSeriGraph &);
+	bool IsChecked(CPoint);
+	double xmult(CPoint p1,CPoint p2,CPoint p0);
+	double distance(CPoint p1,CPoint p2);
+	double disptoline(CPoint p,CPoint l1,CPoint l2);
+	bool insertSegCircle(CPoint c,int r,CPoint l1,CPoint l2);
 public:
 	virtual ~CSeriGraph();
 public:

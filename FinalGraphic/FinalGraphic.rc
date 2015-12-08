@@ -116,6 +116,8 @@ BEGIN
     BUTTON      ID_BRUSHCOLOR
     BUTTON      ID_LINETYPE
     BUTTON      ID_FONT
+    BUTTON      ID_ChECKED
+    BUTTON      ID_DELETE
 END
 
 
@@ -156,7 +158,7 @@ BEGIN
         MENUITEM "画图工具栏(&G)",                   ID_GRAPHTB
         MENUITEM "设置工具栏(&I)",                   32802
     END
-    POPUP "填充图形(&F)"
+    POPUP "填充图形(&C)"
     BEGIN
         MENUITEM "直线(&L)",                      ID_LINE
         MENUITEM "直角矩形(&R)",                    ID_FRECT
@@ -170,7 +172,12 @@ BEGIN
         MENUITEM "椭圆(&E)",                      ID_NELLI
     END
     MENUITEM "文本编辑(&T)",                    ID_TEXT
-    POPUP "设置(P)"
+    POPUP "功能(&G)"
+    BEGIN
+        MENUITEM "选中(&S)",                      ID_ChECKED
+        MENUITEM "删除(&D)",                      ID_DELETE
+    END
+    POPUP "设置(&S)"
     BEGIN
         MENUITEM "画笔宽度(&W)",                    ID_PENWIDTH
         MENUITEM "画笔颜色(&C)",                    ID_PENCOLOR
@@ -192,20 +199,23 @@ END
 
 IDR_MAINFRAME ACCELERATORS 
 BEGIN
-    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
-    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
-    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
-    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    "S",            ID_ChECKED,             VIRTKEY, SHIFT, NOINVERT
+    VK_DELETE,      ID_DELETE,              VIRTKEY, NOINVERT
+    VK_BACK,        ID_DELETE,              VIRTKEY, NOINVERT
 END
 
 
@@ -500,6 +510,8 @@ END
 STRINGTABLE 
 BEGIN
     ID_SETINFO              "设置工具栏"
+    ID_DELETE               "删除选中图形"
+    ID_ChECKED              "选中图形"
 END
 
 #endif    // 中文(中华人民共和国) resources

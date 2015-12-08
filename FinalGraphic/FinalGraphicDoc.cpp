@@ -24,7 +24,9 @@ END_MESSAGE_MAP()
 CFinalGraphicDoc::CFinalGraphicDoc()
 {
 	// TODO: 在此添加一次性构造代码
-
+	m_bIsChecked=false;
+	m_nCheckedId=-1;
+	m_lGraph.RemoveAll();
 }
 
 CFinalGraphicDoc::~CFinalGraphicDoc()
@@ -38,11 +40,12 @@ BOOL CFinalGraphicDoc::OnNewDocument()
 
 	// TODO: 在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
-
+	m_bIsChecked=false;
+	m_nCheckedId=-1;
+	m_SeriGraph=m_DefaultSet;
+	m_lGraph.RemoveAll();
 	return TRUE;
 }
-
-
 
 
 // CFinalGraphicDoc 序列化
@@ -67,6 +70,7 @@ void CFinalGraphicDoc::Serialize(CArchive& ar)
 	else
 	{
 		// TODO: 在此添加加载代码
+		m_lGraph.RemoveAll();
 		ar>>nCount;
 		pos=m_lGraph.GetHeadPosition();
 		for(int i=0;i<nCount;i++){
