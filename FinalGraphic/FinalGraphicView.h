@@ -80,6 +80,10 @@ public:
 	afx_msg void OnDelete();
 public:
 	afx_msg void OnChecked();
+public:
+	afx_msg void OnCopy();
+public:
+	afx_msg void OnPaste();
 };
 
 #ifndef _DEBUG  // FinalGraphicView.cpp 中的调试版本

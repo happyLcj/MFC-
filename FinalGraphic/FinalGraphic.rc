@@ -118,6 +118,8 @@ BEGIN
     BUTTON      ID_FONT
     BUTTON      ID_ChECKED
     BUTTON      ID_DELETE
+    BUTTON      ID_COPY
+    BUTTON      ID_PASTE
 END
 
 
@@ -176,6 +178,8 @@ BEGIN
     BEGIN
         MENUITEM "选中(&S)",                      ID_ChECKED
         MENUITEM "删除(&D)",                      ID_DELETE
+        MENUITEM "复制(&C)",                      ID_COPY
+        MENUITEM "粘贴(&V)",                      ID_PASTE
     END
     POPUP "设置(&S)"
     BEGIN
@@ -199,8 +203,9 @@ END
 
 IDR_MAINFRAME ACCELERATORS 
 BEGIN
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_ChECKED,             VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_DELETE,              VIRTKEY, NOINVERT
+    VK_DELETE,      ID_DELETE,              VIRTKEY, NOINVERT
     VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
@@ -213,9 +218,10 @@ BEGIN
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
-    "S",            ID_ChECKED,             VIRTKEY, SHIFT, NOINVERT
-    VK_DELETE,      ID_DELETE,              VIRTKEY, NOINVERT
-    VK_BACK,        ID_DELETE,              VIRTKEY, NOINVERT
+    "C",            ID_COPY,                VIRTKEY, SHIFT, NOINVERT
+    "V",            ID_PASTE,               VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -224,15 +230,16 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUTBOX DIALOGEX 0, 0, 194, 81
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "关于 FinalGraphic"
 FONT 9, "宋体", 0, 0, 0x1
 BEGIN
-    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "FinalGraphic 1.0 版",IDC_STATIC,40,10,119,8,SS_NOPREFIX
-    LTEXT           "Copyright (C) 2015",IDC_STATIC,40,25,119,8
-    DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
+    ICON            IDR_MAINFRAME,IDC_STATIC,15,17,21,21
+    LTEXT           "FinalGraphic 1.0 版",IDC_STATIC,41,15,95,8,SS_NOPREFIX
+    LTEXT           "姓名：刘彩娟",IDC_STATIC,41,33,64,8
+    DEFPUSHBUTTON   "确定",IDOK,120,47,50,16,WS_GROUP
+    LTEXT           "学号：jk13171110",IDC_STATIC,41,52,71,8
 END
 
 IDD_PENWIDTH DIALOGEX 0, 0, 186, 93
@@ -323,9 +330,9 @@ BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 228
+        RIGHTMARGIN, 187
         TOPMARGIN, 7
-        BOTTOMMARGIN, 48
+        BOTTOMMARGIN, 73
     END
 
     IDD_PENWIDTH, DIALOG
@@ -510,8 +517,14 @@ END
 STRINGTABLE 
 BEGIN
     ID_SETINFO              "设置工具栏"
-    ID_DELETE               "删除选中图形"
-    ID_ChECKED              "选中图形"
+    ID_DELETE               "删除选中图形Delete/BackSpace"
+    ID_ChECKED              "选中图形shift+S"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_COPY                 "复制选中图形shift+C"
+    ID_PASTE                "粘贴选中图形shift+V"
 END
 
 #endif    // 中文(中华人民共和国) resources

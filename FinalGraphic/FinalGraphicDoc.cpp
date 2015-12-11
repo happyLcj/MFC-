@@ -25,25 +25,28 @@ CFinalGraphicDoc::CFinalGraphicDoc()
 {
 	// TODO: 在此添加一次性构造代码
 	m_bIsChecked=false;
+	m_bIsSelected=false;
+	m_bEnablePaste=false;
 	m_nCheckedId=-1;
-	m_lGraph.RemoveAll();
+	m_lGraph.RemoveAll();       //将链表清空
 }
 
 CFinalGraphicDoc::~CFinalGraphicDoc()
 {
 }
 
-BOOL CFinalGraphicDoc::OnNewDocument()
+BOOL CFinalGraphicDoc::OnNewDocument()  //新建文件需初始化
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: 在此添加重新初始化代码
-	// (SDI 文档将重用该文档)
 	m_bIsChecked=false;
+	m_bIsSelected=false;
 	m_nCheckedId=-1;
+	m_bEnablePaste=false;
 	m_SeriGraph=m_DefaultSet;
 	m_lGraph.RemoveAll();
+	oldSeriGraph.m_DrawSet.m_nWidth=0;
 	return TRUE;
 }
 
@@ -56,9 +59,8 @@ void CFinalGraphicDoc::Serialize(CArchive& ar)
 	POSITION pos;
 	CSeriGraph SeriGraph;
 	int nCount=0;
-	if (ar.IsStoring())
+	if (ar.IsStoring()) //存储
 	{
-		// TODO: 在此添加存储代码
 		nCount=(int)m_lGraph.GetCount();
 		ar<<nCount;
 		pos=m_lGraph.GetHeadPosition();
@@ -67,10 +69,9 @@ void CFinalGraphicDoc::Serialize(CArchive& ar)
 			SeriGraph.Serialize(ar);
 		}
 	}
-	else
+	else       //加载
 	{
-		// TODO: 在此添加加载代码
-		m_lGraph.RemoveAll();
+		m_lGraph.RemoveAll();  //先清空链表，防止多文件切换发生错误
 		ar>>nCount;
 		pos=m_lGraph.GetHeadPosition();
 		for(int i=0;i<nCount;i++){

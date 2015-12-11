@@ -48,13 +48,16 @@
 #define ID_32808                        32808
 #define ID_ChECKED                      32809
 #define ID_32810                        32810
+#define ID_COPY                         32818
+#define ID_PASTE                        32819
+#define ID_BUTTON32823                  32823
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
-#define _APS_NEXT_COMMAND_VALUE         32814
+#define _APS_NEXT_COMMAND_VALUE         32824
 #define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

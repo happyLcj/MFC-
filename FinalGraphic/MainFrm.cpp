@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "FinalGraphic.h"
-
+#include "FinalGraphicDoc.h"
 #include "MainFrm.h"
 
 #ifdef _DEBUG
@@ -21,6 +21,17 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_GRAPHTB, &CMainFrame::OnUpdateGraphtb)
 	ON_COMMAND(ID_SETINFO, &CMainFrame::OnSetinfo)
 	ON_UPDATE_COMMAND_UI(ID_SETINFO, &CMainFrame::OnUpdateSetinfo)
+	ON_UPDATE_COMMAND_UI(ID_LINE, &CMainFrame::OnUpdateLine)
+	ON_UPDATE_COMMAND_UI(ID_FRECT, &CMainFrame::OnUpdateFrect)
+	ON_UPDATE_COMMAND_UI(ID_FROURECT, &CMainFrame::OnUpdateFrourect)
+	ON_UPDATE_COMMAND_UI(ID_FELLI, &CMainFrame::OnUpdateFelli)
+	ON_UPDATE_COMMAND_UI(ID_NRECT, &CMainFrame::OnUpdateNrect)
+	ON_UPDATE_COMMAND_UI(ID_NROURECT, &CMainFrame::OnUpdateNrourect)
+	ON_UPDATE_COMMAND_UI(ID_NELLI, &CMainFrame::OnUpdateNelli)
+	ON_UPDATE_COMMAND_UI(ID_ChECKED, &CMainFrame::OnUpdateChecked)
+	ON_UPDATE_COMMAND_UI(ID_DELETE, &CMainFrame::OnUpdateDelete)
+	ON_UPDATE_COMMAND_UI(ID_COPY, &CMainFrame::OnUpdateCopy)
+	ON_UPDATE_COMMAND_UI(ID_PASTE, &CMainFrame::OnUpdatePaste)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -157,4 +168,138 @@ void CMainFrame::OnUpdateSetinfo(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(m_SetInfoTB.IsWindowVisible());
+}
+
+void CMainFrame::OnUpdateLine(CCmdUI *pCmdUI)
+{
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);//去掉前面的勾
+	if(pDoc->m_SeriGraph.m_nDrawStyle==1){
+		pCmdUI->SetCheck(1);//在直线前面打上勾
+		pCmdUI->Enable(false);//将其置灰
+	}
+
+}
+void CMainFrame::OnUpdateFrect(CCmdUI *pCmdUI)
+{
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==2){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateFrourect(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==3){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateFelli(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==4){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateNrect(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==5){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateNrourect(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==6){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateNelli(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_SeriGraph.m_nDrawStyle==7){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateChecked(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	if(pDoc->m_bIsChecked){
+		pCmdUI->SetCheck(1);
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateDelete(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	if(pDoc->m_nCheckedId==-1){
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdateCopy(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	if(pDoc->m_nCheckedId==-1){
+		pCmdUI->Enable(false);
+	}
+}
+
+void CMainFrame::OnUpdatePaste(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd(); 
+	CFinalGraphicDoc* pDoc = (CFinalGraphicDoc*)pMainFrame->GetActiveDocument(); 
+	ASSERT_VALID(pDoc);
+	pCmdUI->SetCheck(0);
+	pCmdUI->Enable(pDoc->m_bEnablePaste);
 }

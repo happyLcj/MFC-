@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "FinalGraphic.h"
-
 #include "FinalGraphicDoc.h"
 #include "MainFrm.h"
 #include "FinalGraphicView.h"
@@ -47,6 +46,8 @@ BEGIN_MESSAGE_MAP(CFinalGraphicView, CView)
 	ON_COMMAND(ID_LINETYPE, &CFinalGraphicView::OnLinetype)
 	ON_COMMAND(ID_DELETE, &CFinalGraphicView::OnDelete)
 	ON_COMMAND(ID_ChECKED, &CFinalGraphicView::OnChecked)
+	ON_COMMAND(ID_COPY, &CFinalGraphicView::OnCopy)
+	ON_COMMAND(ID_PASTE, &CFinalGraphicView::OnPaste)
 END_MESSAGE_MAP()
 
 // CFinalGraphicView 构造/析构
@@ -75,12 +76,11 @@ BOOL CFinalGraphicView::PreCreateWindow(CREATESTRUCT& cs)
 void CFinalGraphicView::OnDraw(CDC* pDC)
 {
 	
-	CFinalGraphicDoc* pDoc = GetDocument();
+	CFinalGraphicDoc* pDoc = GetDocument();  //获取文档类句柄
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
-		return;
-	// TODO: 在此处为本机数据添加绘制代码         
-	CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd;
+		return;       
+	CMainFrame * pFrame=(CMainFrame *)AfxGetApp()->m_pMainWnd; //获取框架类句柄
 	CStatusBar * pStatus = &pFrame->m_wndStatusBar;
 	CString str;
 	if(pStatus){                  //更新状态栏
@@ -109,7 +109,8 @@ void CFinalGraphicView::OnDraw(CDC* pDC)
 		pStatus->SetPaneText(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),str);
 		pStatus->SetPaneInfo(pStatus->CommandToIndex(ID_INDICATOR_FONTCOLOR),ID_INDICATOR_FONTCOLOR,SBPS_NOBORDERS,100);
 	}
-	if(!pDoc->m_bIsChecked&&pDoc->m_nCheckedId!=-1){
+	if((!pDoc->m_bIsChecked&&pDoc->m_nCheckedId!=-1)||
+		(pDoc->m_bIsChecked&&pDoc->m_nCheckedId!=-1&&!pDoc->m_bIsSelected)){ 
 		POSITION prePos=pDoc->m_lGraph.FindIndex(pDoc->m_nCheckedId);
 		CSeriGraph &PreSeriGraph=pDoc->m_lGraph.GetPrev(prePos);
 		PreSeriGraph.m_DrawSet.m_PenColor=pDoc->crOldColor;
@@ -123,7 +124,11 @@ void CFinalGraphicView::OnDraw(CDC* pDC)
 	for(int i=0;i<nCount;i++){
 		const CSeriGraph SeriGraph=pDoc->m_lGraph.GetNext(pos);
 		CPen pen;
-		pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
+		//pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
+		LOGBRUSH logBrush;
+		logBrush.lbStyle = BS_SOLID;
+		logBrush.lbColor = SeriGraph.m_DrawSet.m_PenColor;
+		pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle|PS_GEOMETRIC|PS_ENDCAP_ROUND, SeriGraph.m_DrawSet.m_nWidth, &logBrush); 
 		CPen* pOldPen = pDc->SelectObject(&pen);
 		CBrush brush(SeriGraph.m_DrawSet.m_BrushColor);
 		CBrush* pOldBr=NULL;
@@ -227,6 +232,7 @@ void CFinalGraphicView::OnLine()            //直线
 
 	pDoc->m_SeriGraph.m_nDrawStyle=1;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnFrect()         //填充直角矩形
@@ -237,6 +243,7 @@ void CFinalGraphicView::OnFrect()         //填充直角矩形
 
 	pDoc->m_SeriGraph.m_nDrawStyle=2;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnFrourect()    //填充圆角矩形
@@ -247,6 +254,7 @@ void CFinalGraphicView::OnFrourect()    //填充圆角矩形
 	
 	pDoc->m_SeriGraph.m_nDrawStyle=3;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnFelli()        //填充椭圆
@@ -257,6 +265,7 @@ void CFinalGraphicView::OnFelli()        //填充椭圆
 	
 	pDoc->m_SeriGraph.m_nDrawStyle=4;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnNrect()       //空心直角矩形
@@ -267,6 +276,7 @@ void CFinalGraphicView::OnNrect()       //空心直角矩形
 	
 	pDoc->m_SeriGraph.m_nDrawStyle=5;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnNrourect()     //空心圆角矩形
@@ -277,6 +287,7 @@ void CFinalGraphicView::OnNrourect()     //空心圆角矩形
 	
 	pDoc->m_SeriGraph.m_nDrawStyle=6;
 	pDoc->m_bIsChecked=false;
+	Invalidate();
 }
 
 void CFinalGraphicView::OnNelli()        //空心椭圆
@@ -287,33 +298,9 @@ void CFinalGraphicView::OnNelli()        //空心椭圆
 	
 	pDoc->m_SeriGraph.m_nDrawStyle=7;
 	pDoc->m_bIsChecked=false;
-}
-
-void CFinalGraphicView::OnChecked()
-{
-	// TODO: 在此添加命令处理程序代码
-	CFinalGraphicDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	pDoc->m_bIsChecked=true;
-	pDoc->m_SeriGraph.m_nDrawStyle=0;
-}
-
-void CFinalGraphicView::OnDelete()
-{
-	// TODO: 在此添加命令处理程序代码
-	CFinalGraphicDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if(!pDoc)
-		return ;
-	//pDoc->m_bIsChecked=false;
-	pDoc->m_SeriGraph.m_nDrawStyle=0;
-	if(pDoc->m_nCheckedId==-1)  
-		return ;
-	POSITION pos=pDoc->m_lGraph.FindIndex(pDoc->m_nCheckedId);
-	pDoc->m_lGraph.RemoveAt(pos);
-	pDoc->m_nCheckedId=-1;
 	Invalidate();
 }
+
 
 void CFinalGraphicView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -335,15 +322,20 @@ void CFinalGraphicView::OnMouseMove(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CFinalGraphicDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-
+	pDoc->m_ptNow=point;
 	if(!(pDoc->m_SeriGraph.m_bIsDown))
 		return ;
 	if(pDoc->m_bIsChecked)      //若当前为选中模式，则不画图
 		return ;
 	CSeriGraph& SeriGraph=pDoc->m_SeriGraph;
-
 	CPen pen;     //创建画笔并初始化
-	pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
+	//pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle,SeriGraph.m_DrawSet.m_nWidth,SeriGraph.m_DrawSet.m_PenColor);
+	
+	LOGBRUSH logBrush;
+	logBrush.lbStyle = BS_SOLID;
+	logBrush.lbColor = SeriGraph.m_DrawSet.m_PenColor;
+	pen.CreatePen(SeriGraph.m_DrawSet.m_nPenStyle|PS_GEOMETRIC|PS_ENDCAP_ROUND, SeriGraph.m_DrawSet.m_nWidth, &logBrush); 
+	
 	CPen* pOldPen = pDc->SelectObject(&pen);      //将原画笔置换出来
 
 	CBrush brush(SeriGraph.m_DrawSet.m_BrushColor);     //创建画刷并初始化
@@ -404,9 +396,11 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 	if(pDoc->m_bIsChecked){      //若当前为选中模式，则不画图
 		POSITION pos=pDoc->m_lGraph.GetTailPosition();  //从后往前遍历找到最上层被选中的图形
 		int nCount=(int)pDoc->m_lGraph.GetCount();
+		pDoc->m_bIsSelected=false;
 		for(int i=nCount-1;i>=0;i--){
 			CSeriGraph &NowSeriGraph=pDoc->m_lGraph.GetPrev(pos);
 			if(NowSeriGraph.IsChecked(point)){
+				pDoc->m_bIsSelected=true;
 				if(pDoc->m_nCheckedId!=-1){        //更新选中图形需先将前一次选中标志去掉
 					POSITION prePos=pDoc->m_lGraph.FindIndex(pDoc->m_nCheckedId);
 					CSeriGraph &PreSeriGraph=pDoc->m_lGraph.GetPrev(prePos);
@@ -423,18 +417,25 @@ void CFinalGraphicView::OnLButtonUp(UINT nFlags, CPoint point)
 					NowSeriGraph.m_DrawSet.m_PenColor=RGB(255,0,0);
 				}
 				NowSeriGraph.m_DrawSet.m_nWidth=10;
-				Invalidate();
 				break;
 			}
 		}
 	}
 	else if(pDoc->m_SeriGraph.m_nDrawStyle>=1&&pDoc->m_SeriGraph.m_nDrawStyle<=7){
 		pDoc->m_SeriGraph.m_ptEnd=point;
+		if(pDoc->m_SeriGraph.m_nDrawStyle!=1){  //若不是直线，用m_ptStart存左上点，m_ptEnd存右下点
+			CPoint leftTp,rightBt;
+			leftTp.x=min(pDoc->m_SeriGraph.m_ptStart.x,pDoc->m_SeriGraph.m_ptEnd.x);
+			rightBt.x=max(pDoc->m_SeriGraph.m_ptStart.x,pDoc->m_SeriGraph.m_ptEnd.x);
+			leftTp.y=min(pDoc->m_SeriGraph.m_ptStart.y,pDoc->m_SeriGraph.m_ptEnd.y);
+			rightBt.y=max(pDoc->m_SeriGraph.m_ptStart.y,pDoc->m_SeriGraph.m_ptEnd.y);
+			pDoc->m_SeriGraph.m_ptStart=leftTp;
+			pDoc->m_SeriGraph.m_ptEnd=rightBt;
+		}
 		pDoc->m_lGraph.AddTail(pDoc->m_SeriGraph);   //将画的图形存到图形链表中
-		Invalidate();								 //强制刷新，将调用OnDraw函数，在该函数中绘图
 	}
 	pDoc->m_SeriGraph.m_bIsDown=false;
-	
+	Invalidate();							 //强制刷新，将调用OnDraw函数，在该函数中绘图
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -562,3 +563,58 @@ void CFinalGraphicView::OnLinetype()                  //设置线形
 	}
 }
 
+
+void CFinalGraphicView::OnChecked()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	pDoc->m_bIsChecked=true;
+	pDoc->m_SeriGraph.m_nDrawStyle=0;
+}
+
+void CFinalGraphicView::OnDelete()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return ;
+	pDoc->m_SeriGraph.m_nDrawStyle=0;
+	if(pDoc->m_nCheckedId==-1)  
+		return ;
+	POSITION pos=pDoc->m_lGraph.FindIndex(pDoc->m_nCheckedId);
+	pDoc->m_lGraph.RemoveAt(pos);
+	pDoc->m_nCheckedId=-1;
+	Invalidate();
+}
+
+void CFinalGraphicView::OnCopy()
+{
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return ;
+	pDoc->m_SeriGraph.m_nDrawStyle=0;
+	if(pDoc->m_nCheckedId==-1)  
+		return ;
+	POSITION pos=pDoc->m_lGraph.FindIndex(pDoc->m_nCheckedId);
+	pDoc->oldSeriGraph=pDoc->m_lGraph.GetNext(pos);
+	pDoc->oldSeriGraph.m_DrawSet.m_PenColor=pDoc->crOldColor;
+	pDoc->oldSeriGraph.m_DrawSet.m_nWidth=pDoc->nOldWidth;
+	pDoc->m_bEnablePaste=true;
+}
+
+void CFinalGraphicView::OnPaste()
+{
+	CFinalGraphicDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return ;
+	CSeriGraph &tmpSeri=pDoc->oldSeriGraph;
+	tmpSeri.m_ptEnd.x+=pDoc->m_ptNow.x-tmpSeri.m_ptStart.x;
+	tmpSeri.m_ptEnd.y+=pDoc->m_ptNow.y-tmpSeri.m_ptStart.y;
+	tmpSeri.m_ptStart=pDoc->m_ptNow;
+	pDoc->m_lGraph.AddTail(tmpSeri);
+	Invalidate();
+}
